@@ -111,4 +111,4 @@ def process_and_upload_data():
     print("✅ Hoàn tất! Dữ liệu đã sẵn sàng trên Firebase.")
 
 if __name__ == "__main__":
-    process_data()
+    process_and_upload_data()
