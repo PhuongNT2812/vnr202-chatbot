@@ -2,7 +2,7 @@ import importlib
 import os
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.document_loaders import TextLoader
+from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import firebase_admin
@@ -15,7 +15,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 def process_and_upload_data():
     print("🚀 Bắt đầu quá trình xử lý dữ liệu RAG...")
 
-    # BƯỚC 1: LOADER (Đọc tất cả file trong thư mục data_raw)
+    # BƯỚC 1: LOADER (Đọc tất cả file trong thư mục data_raw)cle
     folder_path = "data_raw"
     if not os.path.isdir(folder_path):
         raise FileNotFoundError(f"Thư mục {folder_path} không tồn tại")
@@ -28,7 +28,7 @@ def process_and_upload_data():
             return None
 
     Docx2txtLoader = _import_loader("langchain_community.document_loaders", "Docx2txtLoader")
-    UnstructuredWordDocumentLoader = _import_loader("langchain.document_loaders", "UnstructuredWordDocumentLoader")
+    UnstructuredWordDocumentLoader = _import_loader("langchain_community.document_loaders", "UnstructuredWordDocumentLoader")
 
     documents = []
     supported_extensions = [".pdf", ".doc", ".docx", ".txt", ".md"]
@@ -80,14 +80,12 @@ def process_and_upload_data():
     embeddings_model = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
     # BƯỚC 4: VECTOR STORE (Đẩy lên Firestore Database)
+    # BƯỚC 4: VECTOR STORE (Đẩy lên Firestore Database)
     print("4. Đang kết nối với Firebase và đẩy dữ liệu lên mây...")
-    # Khởi tạo Firebase (Lưu ý: Bạn sẽ cần tải file Service Account JSON từ Firebase về để xác thực thực tế)
     if not firebase_admin._apps:
-        # Tạm thời dùng thông tin mặc định nếu bạn đã login firebase CLI
-        cred = credentials.ApplicationDefault() 
-        firebase_admin.initialize_app(cred, {
-            'projectId': 'vnr202-chatbot',
-        })
+        # Trỏ đường dẫn tới cái thẻ căn cước vừa tải về
+        cred = credentials.Certificate("serviceAccountKey.json") 
+        firebase_admin.initialize_app(cred)
     
     db = firestore.client()
     collection_ref = db.collection('lich_su_dang_vectors')
